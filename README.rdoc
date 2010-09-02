@@ -50,12 +50,3 @@ If that is the case, just create the branch locally and check it out.
 * gitback[http://github.com/brycethornton/gitback] - very similar to this project, but sets up the repository from a config file.
 * Desktop backup systems
 * Time machine (on OS X)
-
-= TODO
-
-Restore:
-
-if options[ :restore ]
-  `rsync -av --no-p --no-g --no-implied-dirs --files-from=- ./ /`
-  exit
-end
