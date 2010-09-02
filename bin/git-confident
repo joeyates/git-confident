@@ -12,7 +12,6 @@ options = {
   :commit  => true,
   :path    => File.expand_path( Dir::pwd ) # Default to current directory
 }
-options[ :path ] = '/Users/joe/setup/client'
 
 OptionParser.new do | opts |
   opts.banner = "Usage: $0 [options]"
