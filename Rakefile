@@ -24,6 +24,7 @@ spec = Gem::Specification.new do |s|
 
   s.files            = ADMIN_FILES +
                        SOURCE_FILES
+  s.executables      += 'bin/*.rb'
   s.require_paths    = [ 'lib' ]
   s.add_dependency( 'rake', '>= 0.8.7' )
   s.add_dependency( 'git', '>= 1.2.5' )
