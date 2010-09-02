@@ -1,0 +1,61 @@
+= git-confidence - Automate Configuration Backup to a Remote Git repository
+
+* Keep a backup of single files scattered around your file system,
+* Add those files to a Git repository
+* When they change, they get backed up
+* Restore your files
+
+= Requirements
+
+* A remote (preferably non-public) server to push your repository to.
+
+= Multiple Branches for Computers with Similar Configurations
+
+If you are backing up similar configurations from different computers,
+you may want to keep several versions in branches.
+If that is the case, just create the branch locally and check it out.
+
+= Getting Started
+
+== Create a Git Repository of The Files You Want Backed Up
+
+* Create an empty Git repository:
+ $ mkdir ~/my_backup
+ $ git init
+* Add some files, mimicking their full path:
+ $ mkdir -p etc
+ $ cp /etc/hosts etc/
+ $ git add etc/hosts
+* Set up a git repository on your remote server:
+ $ mkdir -p ~/gitpath/my_backup
+ $ cd ~/gitpath/my_backup
+ $ git init --bare
+* Add your remote server as 'origin':
+ $ git remote add origin ssh://my.remote.com/gitpath/my_backup
+* Check commit and push work:
+ $ git commit -m "I'm starting by backing up my /etc/hosts"
+ $ git push
+
+== Set Up a Cron Job
+
+ $ crontab -e
+    13    23     *     *     *     cd ~/my_backup && git-confidence
+
+= Functions
+
+
+= Alternatives
+
+* rsync
+* gitback[http://github.com/brycethornton/gitback] - very similar to this project, but sets up the repository from a config file.
+* Desktop backup systems
+* Time machine (on OS X)
+
+= TODO
+
+Restore:
+
+if options[ :restore ]
+  `rsync -av --no-p --no-g --no-implied-dirs --files-from=- ./ /`
+  exit
+end

@@ -1,0 +1,36 @@
+#!/usr/bin/env ruby
+
+require 'rubygems' if RUBY_VERSION < '1.9'
+require 'optparse'
+ROOT_PATH = File.dirname( File.expand_path( File.dirname( __FILE__ ) ) )
+LIB_PATH  = File.join( ROOT_PATH, 'lib' )
+$:.unshift( LIB_PATH )
+require 'git/confident'
+
+options = {
+  :restore => false,
+  :commit  => true,
+  :path    => File.expand_path( Dir::pwd ) # Default to current directory
+}
+options[ :path ] = '/Users/joe/setup/client'
+
+OptionParser.new do | opts |
+  opts.banner = "Usage: $0 [options]"
+
+  opts.on("-C", "--no-commit", "Only copy files, do not do a git commit") do
+    options[:commit] = false
+  end
+
+  opts.on("-p", "--path PATH", "The path to the local copy of the repository. Defaults to current directory") do | path |
+    options[ :path ] = File.expand_path( path )
+  end
+
+  opts.on("-r", "--restore", "Restore system files from the repository") do
+    options[ :restore ] = true
+  end
+end.parse!
+
+conf = Git::Confident.new( options[ :path ] )
+conf.local_backup
+conf.commit
+conf.push
