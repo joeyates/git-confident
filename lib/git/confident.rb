@@ -14,7 +14,6 @@ module Git
     end
 
     def initialize( path )
-      
       raise "Git repository not found at '#{ path }'" if ! File.directory?( "#{ path }/.git" )
       @path = path.clone
       super( { :working_directory => @path } )
