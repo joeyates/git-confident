@@ -41,8 +41,13 @@ If that is the case, just create the branch locally and check it out.
  $ crontab -e
     13    23     *     *     *     cd ~/my_backup && git-confidence
 
-= Functions
+= Online
 
+* {Source code}[http://github.com/joeyates/git-confident]
+* Documentation[http://rdoc.info/github/joeyates/git-confident/master/frames]
+* Wiki[http://github.com/joeyates/git-confident/wiki]
+* {Bug tracker}[http://github.com/joeyates/git-confident/issues]
+* Gem[http://rubygems.org/gems/git-confident]
 
 = Alternatives
 
