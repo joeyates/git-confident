@@ -1,4 +1,4 @@
-= git-confidence - Automate Configuration Backup to a Remote Git repository
+= git-confident - Automate Configuration Backup to a Remote Git repository
 
 * Keep a backup of single files scattered around your file system,
 * Add those files to a Git repository
@@ -39,7 +39,7 @@ If that is the case, just create the branch locally and check it out.
 == Set Up a Cron Job
 
  $ crontab -e
-    13    23     *     *     *     cd ~/my_backup && git-confidence
+    13    23     *     *     *     cd ~/my_backup && git-confident
 
 = Online
 
