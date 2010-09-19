@@ -31,5 +31,6 @@ end.parse!
 
 conf = Git::Confident.new( options[ :path ] )
 conf.local_backup
+exit unless options[:commit]
 conf.commit
 conf.push
