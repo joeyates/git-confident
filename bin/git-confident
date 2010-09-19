@@ -8,16 +8,19 @@ $:.unshift( LIB_PATH )
 require 'git/confident'
 
 options = {
-  :restore => false,
-  :commit  => true,
-  :path    => File.expand_path( Dir::pwd ) # Default to current directory
+  :action => :backup,
+  :path   => File.expand_path( Dir::pwd ) # Default to current directory
 }
 
 OptionParser.new do | opts |
-  opts.banner = "Usage: $0 [options]"
+  opts.banner = "Usage: #{ $0 } [options]"
 
   opts.on("-C", "--no-commit", "Only copy files, do not do a git commit") do
-    options[:commit] = false
+    options[ :no_commit ] = true
+  end
+
+  opts.on("-l", "--list", "List all files in the repository") do
+    options[ :action ] = :list
   end
 
   opts.on("-p", "--path PATH", "The path to the local copy of the repository. Defaults to current directory") do | path |
@@ -25,12 +28,8 @@ OptionParser.new do | opts |
   end
 
   opts.on("-r", "--restore", "Restore system files from the repository") do
-    options[ :restore ] = true
+    options[ :action ] = :restore
   end
 end.parse!
 
-conf = Git::Confident.new( options[ :path ] )
-conf.local_backup
-exit unless options[:commit]
-conf.commit
-conf.push
+Git::Confident.new( options )
