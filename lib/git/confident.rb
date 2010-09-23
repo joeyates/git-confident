@@ -8,7 +8,7 @@ module Git
     module VERSION #:nodoc:
       MAJOR = 0
       MINOR = 0
-      TINY  = 5
+      TINY  = 6
  
       STRING = [ MAJOR, MINOR, TINY ].join( '.' )
     end
@@ -45,7 +45,7 @@ module Git
     end
 
     def restore
-      IO.popen( "rsync --no-perms --executability --files-from=- #{ @path }/ /", "w+" ) do | pipe |
+      IO.popen( "rsync --no-perms --executability --keep-dirlinks --files-from=- #{ @path }/ /", "w+" ) do | pipe |
         files.each { | pathname | pipe.puts pathname }
       end
     end
