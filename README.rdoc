@@ -41,6 +41,21 @@ If that is the case, just create the branch locally and check it out.
  $ crontab -e
     13    23     *     *     *     cd ~/my_backup && git-confident
 
+= Advanced Use
+
+== Ignore files
+You can store extra files in your backup repository (like text notes) adding .gitignore at the end
+of the filename:
+ $ SETUP_NOTES.gitignore
+so git-confident won't restore them.
+
+== Folder scan
+git-confident keeps a copy of each file added to git. This is not very useful when you have
+an entire folder to backup. You can track a whole folder adding a empty file in that folder named .gitrecursive:
+ $ cd ~/my_backup
+ $ touch etc/apache2/.gitrecusive
+
+
 = Online
 
 * {Source code}[http://github.com/joeyates/git-confident]

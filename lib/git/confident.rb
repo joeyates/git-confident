@@ -32,7 +32,15 @@ module Git
     end
 
     def files
-      ls_files.keys.sort
+      ls_files.keys.reject do | f |
+        f =~ /(\.gitignore|\.gitrecursive)$/i
+      end.sort
+    end
+
+    def folders
+      ls_files.keys.collect do | f |
+        f.gsub( '.gitrecursive', '' ) if f =~ /\.gitrecursive$/i
+      end.compact
     end
 
     private
@@ -52,7 +60,7 @@ module Git
 
     def local_backup
       IO.popen( "rsync -av --files-from=- / #{ @path }/", "w+" ) do | pipe |
-        files.each { | pathname | pipe.puts pathname }
+        (files + folders).each { | pathname | pipe.puts pathname }
       end
     end
 
