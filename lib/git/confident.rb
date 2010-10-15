@@ -1,5 +1,6 @@
 require 'rubygems' if RUBY_VERSION < '1.9'
 require 'git'
+require 'git/elements'
 
 module Git
 
@@ -20,27 +21,23 @@ module Git
       raise "Git repository not found at '#{ @path }'" if ! File.directory?( "#{ @path }/.git" )
 
       super( { :working_directory => @path } )
+      @elements = Git::Elements.new( @path )
 
       case options[ :action ]
       when :backup
         backup
       when :list
-        puts files
+        puts "files:"
+        puts @elements.files
+        puts "folders:"
+        puts @elements.folders
+        puts "ignored:"
+        puts @elements.ignored
+        puts "all:"
+        puts @elements.all
       when :restore
         restore
       end     
-    end
-
-    def files
-      ls_files.keys.reject do | f |
-        f =~ /(\.gcignore|\.gcrecursive)$/i
-      end.sort
-    end
-
-    def folders
-      ls_files.keys.collect do | f |
-        f.gsub( '.gcrecursive', '' ) if f =~ /\.gcrecursive$/i
-      end.compact
     end
 
     private
@@ -54,18 +51,19 @@ module Git
 
     def restore
       IO.popen( "rsync --no-perms --executability --keep-dirlinks --files-from=- #{ @path }/ /", "w+" ) do | pipe |
-        files.each { | pathname | pipe.puts pathname }
+        @elements.all.each { | pathname | pipe.puts pathname }
       end
     end
 
     def local_backup
       IO.popen( "rsync -av --files-from=- / #{ @path }/", "w+" ) do | pipe |
-        (files + folders).each { | pathname | pipe.puts pathname }
+        @elements.all.each { | pathname | pipe.puts pathname }
       end
+      @elements.all.each { |e| puts e }
     end
 
     def commit
-      needs_commit = status.changed.size > 0
+      needs_commit = (status.changed.size + status.untracked.size) > 0
       return if ! needs_commit
       add
       super( "Automatic commit at #{ Time.now }" )

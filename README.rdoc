@@ -44,9 +44,8 @@ If that is the case, just create the branch locally and check it out.
 = Advanced Use
 
 == Ignore files and folders
-You can store extra files in your backup repository (like text notes) adding .gcignore at the end
-of the filename:
- $ SETUP_NOTES.gcignore
+You can store extra files in your backup repository (like text notes) adding them to a .gcignore file:
+ $ echo SETUP_NOTES >> .gcignore
 so git-confident won't restore them. Similarly, you can ignore an entire folder by adding a .gcignore
 file inside it.
 
