@@ -22,7 +22,7 @@ describe 'when handling the repository' do
   end
 
   it 'lists files' do
-    conf = Git::Confident.new( @repo_path )
+    conf = Git::Confident.new( :path => @repo_path )
     conf.files.should == [ 'test_file' ]
   end
 
