@@ -33,13 +33,13 @@ module Git
 
     def files
       ls_files.keys.reject do | f |
-        f =~ /(\.gitignore|\.gitrecursive)$/i
+        f =~ /(\.gcignore|\.gcrecursive)$/i
       end.sort
     end
 
     def folders
       ls_files.keys.collect do | f |
-        f.gsub( '.gitrecursive', '' ) if f =~ /\.gitrecursive$/i
+        f.gsub( '.gcrecursive', '' ) if f =~ /\.gcrecursive$/i
       end.compact
     end
 
