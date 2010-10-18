@@ -65,7 +65,7 @@ module Git
       needs_commit = (status.changed.size + status.untracked.size) > 0
       return if ! needs_commit
       add
-      super( "Automatic commit at #{ Time.now }" )
+      super( "Automatic commit at #{ Time.now }", {:add_all => true} )
     end
 
     def push
