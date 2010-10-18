@@ -46,15 +46,16 @@ If that is the case, just create the branch locally and check it out.
 == Ignore files and folders
 You can store extra files in your backup repository (like text notes) adding them to a .gcignore file:
  $ echo SETUP_NOTES >> .gcignore
-so git-confident won't restore them. Similarly, you can ignore an entire folder by adding a .gcignore
-file inside it.
+ $ git add .gcignore
+so git-confident won't restore them. Similarly to .gitignore behaviour, you can ignore an entire folder
+by adding a .gcignore file inside it.
 
 
 == Folder scan
 git-confident keeps a copy of each file added to git. This is not very useful when you have
-an entire folder to backup. You can track a whole folder adding a empty file in that folder named .gcrecursive:
- $ cd ~/my_backup
+an entire folder to backup. You can track a whole folder using a .gcrecusrive file (acts like .gitignore):
  $ touch etc/apache2/.gcrecusive
+ $ git add etc/apache2/.gcrecusive
 
 
 = Online
