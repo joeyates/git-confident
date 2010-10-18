@@ -10,37 +10,43 @@ module Git
     def initialize( path )
       @path = path.clone
       super( { :working_directory => @path } )
-    end
-
-    def files
-      ls_files.keys.reject do | f |
-        name = File.basename( f )
-        name =~ /^\.#{IGNORE}$/i or name =~ /^\.#{RECURSIVE}$/i
-      end
+      @gcfiles, @gitfiles = elements_scan
     end
 
     def ignored
-      ignores = ls_files.keys.select do | f |
+      return @ignored if @ignored
+      ignores = @gcfiles.select do | f |
         File.basename( f ) =~ /^\.#{IGNORE}$/i
       end
-      gcfiles_scan ignores
+      @ignored = gcfiles_scan( ignores )
     end
 
     def folders
-      recursives = ls_files.keys.select do | f |
+      return @folders if @folders
+      recursives = @gcfiles.select do | f |
         File.basename( f ) =~ /^\.#{RECURSIVE}$/i
       end
-      gcfiles_scan( recursives ).collect { |f| f + '/' }
+      @folders = gcfiles_scan( recursives ).collect { |f| File.join f, '/' }
     end
 
-    def all
-      selected_files = files.reject do | f |
+    def files
+      return @files if @files
+      @files = @gitfiles.reject do | f |
         (ignored + folders).find { |i| f =~ /^#{i}/ }
-      end
-      selected_files + folders
+      end.sort
     end
+
 
     private
+
+    # result[0] = git-confident special files
+    # result[1] = other git tracked files
+    def elements_scan
+      result = ls_files.keys.sort.partition do | f |
+        name = File.basename( f )
+        name =~ /^\.#{IGNORE}$/i or name =~ /^\.#{RECURSIVE}$/i or name =~ /^\.gitignore$/i
+      end
+    end
 
     def gcfiles_scan( files )
       files.collect do | file |
@@ -55,7 +61,7 @@ module Git
           next line if relative_path == '.'
           File.join( relative_path, line )
         end.compact
-      end.flatten
+      end.flatten.sort
     end
 
   end

@@ -14,6 +14,8 @@ module Git
       STRING = [ MAJOR, MINOR, TINY ].join( '.' )
     end
 
+    attr_reader :elements
+
     def initialize( options )
       @path      = options[ :path ].clone
       @no_commit = options[ :no_commit ] ? true : false
@@ -27,14 +29,12 @@ module Git
       when :backup
         backup
       when :list
-        puts "files:"
+        puts "Files:"
         puts @elements.files
-        puts "folders:"
+        puts "Folders:"
         puts @elements.folders
-        puts "ignored:"
+        puts "Ignored:"
         puts @elements.ignored
-        puts "all:"
-        puts @elements.all
       when :restore
         restore
       end     
@@ -50,16 +50,15 @@ module Git
     end
 
     def restore
-      IO.popen( "rsync --no-perms --executability --keep-dirlinks --files-from=- #{ @path }/ /", "w+" ) do | pipe |
-        @elements.all.each { | pathname | pipe.puts pathname }
+      IO.popen( "rsync --no-perms --executability --keep-dirlinks --delete --files-from=- #{ @path }/ /", "w+" ) do | pipe |
+        (@elements.files + @elements.folders).each { | pathname | pipe.puts pathname }
       end
     end
 
     def local_backup
-      IO.popen( "rsync -av --files-from=- / #{ @path }/", "w+" ) do | pipe |
-        @elements.all.each { | pathname | pipe.puts pathname }
+      IO.popen( "rsync -a --recursive --delete --files-from=- / #{ @path }/", "w+" ) do | pipe |
+        (@elements.files + @elements.folders).each { | pathname | pipe.puts pathname }
       end
-      @elements.all.each { |e| puts e }
     end
 
     def commit
