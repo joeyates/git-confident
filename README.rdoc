@@ -41,6 +41,23 @@ If that is the case, just create the branch locally and check it out.
  $ crontab -e
     13    23     *     *     *     cd ~/my_backup && git-confident
 
+= Advanced Use
+
+== Ignore files and folders
+You can store extra files in your backup repository (like text notes) adding them to a .gcignore file:
+ $ echo SETUP_NOTES >> .gcignore
+ $ git add .gcignore
+so git-confident won't restore them. Similarly to .gitignore behaviour, you can ignore an entire folder
+by adding a .gcignore file inside it.
+
+
+== Folder scan
+git-confident keeps a copy of each file added to git. This is not very useful when you have
+an entire folder to backup. You can track a whole folder using a .gcrecusrive file (acts like .gitignore):
+ $ touch etc/apache2/.gcrecusive
+ $ git add etc/apache2/.gcrecusive
+
+
 = Online
 
 * {Source code}[http://github.com/joeyates/git-confident]
