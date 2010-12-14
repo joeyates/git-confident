@@ -52,6 +52,7 @@ If that is the case, just create the branch locally and check it out.
 = Alternatives
 
 * rsync
+* http://eigenclass.org/hiki/gibak-0.3.0
 * gitback[http://github.com/brycethornton/gitback] - very similar to this project, but sets up the repository from a config file.
 * Desktop backup systems
 * Time machine (on OS X)
