@@ -49,4 +49,6 @@ end
 
 usage if options[ :action ].nil?
 
+options[ :files ] = ARGV.clone if ARGV.size > 0
+
 Git::Confident.new( options )
