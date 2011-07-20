@@ -12,7 +12,12 @@ options = {
   :path   => File.expand_path( Dir::pwd ) # Default to current directory
 }
 
-OptionParser.new do | opts |
+def usage
+  puts @opts.to_s
+  exit 0
+end
+
+@opts = OptionParser.new do | opts |
   opts.banner = "Usage: #{ $0 } [options]"
 
   opts.on("-C", "--no-commit", "Only copy files, do not do a git commit") do
@@ -23,13 +28,19 @@ OptionParser.new do | opts |
     options[ :action ] = :list
   end
 
-  opts.on("-p", "--path PATH", "The path to the local copy of the repository. Defaults to current directory") do | path |
-    options[ :path ] = File.expand_path( path )
-  end
-
   opts.on("-r", "--restore", "Restore system files from the repository") do
     options[ :action ] = :restore
   end
-end.parse!
+
+  opts.on("-h", "--help", "Show usage") do
+    usage
+  end
+
+  opts.on("-p", "--path PATH", "The path to the local copy of the repository. Defaults to current directory") do | path |
+    options[ :path ] = File.expand_path( path )
+  end
+end
+
+@opts.parse!
 
 Git::Confident.new( options )
