@@ -8,7 +8,6 @@ $:.unshift( LIB_PATH )
 require 'git/confident'
 
 options = {
-  :action => :backup,
   :path   => File.expand_path( Dir::pwd ) # Default to current directory
 }
 
@@ -20,7 +19,12 @@ end
 @opts = OptionParser.new do | opts |
   opts.banner = "Usage: #{ $0 } [options]"
 
+  opts.on("-b", "--backup", "Copy tracked files to the repository, commit changes and push") do
+    options[ :action ] = :backup
+  end
+
   opts.on("-C", "--no-commit", "Only copy files, do not do a git commit") do
+    options[ :action ] = :backup
     options[ :no_commit ] = true
   end
 
@@ -42,5 +46,7 @@ end
 end
 
 @opts.parse!
+
+usage if options[ :action ].nil?
 
 Git::Confident.new( options )
