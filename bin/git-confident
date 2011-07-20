@@ -17,7 +17,10 @@ def usage
 end
 
 @opts = OptionParser.new do | opts |
-  opts.banner = "Usage: #{ $0 } [options]"
+  opts.banner = "Usage: #{ $0 } [options] [FILES]"
+
+  opts.separator ""
+  opts.separator "Actions:"
 
   opts.on("-b", "--backup", "Copy tracked files to the repository, commit changes and push") do
     options[ :action ] = :backup
@@ -26,6 +29,10 @@ end
   opts.on("-C", "--no-commit", "Only copy files, do not do a git commit") do
     options[ :action ] = :backup
     options[ :no_commit ] = true
+  end
+
+  opts.on("-d", "--diff", "Show differences between file system and repository") do
+    options[ :action ] = :diff
   end
 
   opts.on("-l", "--list", "List all files in the repository") do
@@ -40,9 +47,18 @@ end
     usage
   end
 
+  opts.separator ""
+  opts.separator "Other options:"
+
   opts.on("-p", "--path PATH", "The path to the local copy of the repository. Defaults to current directory") do | path |
     options[ :path ] = File.expand_path( path )
   end
+
+  opts.separator ""
+  opts.separator "FILES:"
+  opts.separator "Files are given with their repository path."
+  opts.separator "E.g. a file that resides in /home/user/my_file"
+  opts.separator "     has a repository path of home/user/my_file"
 end
 
 @opts.parse!

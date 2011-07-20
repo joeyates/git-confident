@@ -28,6 +28,8 @@ module Git
       case options[ :action ]
       when :backup
         backup
+      when :diff
+        diff
       when :list
         list
       when :restore
@@ -51,6 +53,13 @@ module Git
       return if @no_commit
       commit
       push
+    end
+
+    def diff
+      file_list.each do | pathname |
+        s = `diff -U 2 #{ @path }/#{ pathname } /#{ pathname }`
+        puts s unless s.empty?
+      end
     end
 
     def list
