@@ -9,7 +9,7 @@ module Git
     module VERSION #:nodoc:
       MAJOR = 0
       MINOR = 0
-      TINY  = 7
+      TINY  = 8
 
       STRING = [ MAJOR, MINOR, TINY ].join( '.' )
     end
@@ -24,6 +24,7 @@ module Git
       raise "Git repository not found at '#{ @path }'" if ! File.directory?( "#{ @path }/.git" )
 
       super( { :working_directory => @path } )
+      @elements = Git::Elements.new( @path )
 
       case options[ :action ]
       when :backup
@@ -43,7 +44,6 @@ module Git
       if @files
         @files
       else
-        @elements = Git::Elements.new( @path )
         @elements.files + @elements.folders
       end
     end
